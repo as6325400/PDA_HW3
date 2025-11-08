@@ -1,0 +1,4 @@
+/build
+testcase/*
+!testcase/public1.lef
+!testcase/public1.def
