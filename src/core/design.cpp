@@ -19,6 +19,10 @@ void Design::upsertNet(const Net& n) {
   nets[n.name] = n;
 }
 
+void Design::upsertPin(const Pin& p) {
+  pins[p.name] = p;
+}
+
 void Design::buildInstanceNetLists() {
 
   for (const auto& [netName, net] : nets) {

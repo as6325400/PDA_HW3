@@ -52,8 +52,15 @@ struct Instance {
 struct Net {
   std::string name;
   std::vector<std::string> insts; // 同一條 net 連接的 instances
+  std::vector<std::string> pins; 
 };
 
+struct Pin {
+  std::string name;
+  std::string net;
+  int x = 0;
+  int y = 0;
+};
 
 
 class Design {
@@ -72,6 +79,7 @@ public:
   std::vector<Row> rows;
   std::unordered_map<std::string, Instance> instances;
   std::unordered_map<std::string, Net> nets;
+  std::unordered_map<std::string, Pin> pins;
 
   // --- APIs ---
   void buildInstanceNetLists();
@@ -79,6 +87,7 @@ public:
   void upsertMacro(const Macro& m);
   void upsertInstance(const Instance& i);
   void upsertNet(const Net& n);
+  void upsertPin(const Pin& p);
 
   void setDieArea(int llx, int lly, int urx, int ury) noexcept {
     die_llx = llx;

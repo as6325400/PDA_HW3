@@ -154,7 +154,8 @@ void DefReader::read(const std::string& path, Design& d) {
               char ch;
               std::string inst, pin; 
               ns >> inst >> pin >> ch;
-              net.insts.push_back(inst);
+              if(inst == "PIN") net.pins.push_back(pin);
+              else net.insts.push_back(inst);
             } else if (tok == ";") break;
           }
 
@@ -164,10 +165,48 @@ void DefReader::read(const std::string& path, Design& d) {
       }
     }
 
+    // ---- Pins ----
+    else if (token == "PINS") {
+      int nPins = 0;
+      iss >> nPins;  // PINS 1211 ;
 
+      while (std::getline(fin, line)) {
+        std::string trimmed = io::trim(line);
+        if (trimmed == "END PINS") break;
+        if (!trimmed.empty() && trimmed[0] == '-') {
+          std::string pinBlock = trimmed;
+          while (pinBlock.find(';') == std::string::npos &&
+                 std::getline(fin, line)) {
+            pinBlock += " " + io::trim(line);
+          }
 
+          std::istringstream ps(pinBlock);
+          std::string dash;
+          ps >> dash;  // '-'
 
-    
+          core::Pin pin;
+
+          // 先讀 pin 名稱
+          ps >> pin.name; // 例如 pin999
+
+          std::string t;
+          while (ps >> t) {
+            if (t == "+") {
+              continue;
+            } else if (t == "NET") {
+              ps >> pin.net;  // NET net2110 / pin1
+            } else if (t == "PLACED" || t == "FIXED") {
+              char ch;
+              ps >> ch >> pin.x >> pin.y >> ch; // '(' x y ')'
+            } else if (t == ";") {
+              break;
+            }
+          }
+
+          d.upsertPin(pin);
+        }
+      }
+    }
   }
 }
 }

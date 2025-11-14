@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -MMD -MP
+CXXFLAGS = -O3 -MMD -MP -g
 TARGET = ../bin/main
 VERIFY = ../verifier/verify
 BUILD_DIR = ../build
@@ -9,10 +9,12 @@ ARGS = ../testcase/public1.lef ../testcase/public1.def ../output/public.out.def
 SRC = $(wildcard core/*.cpp io/*.cpp placer/*.cpp) main.cpp
 OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRC))
 DEPS = $(OBJ:.o=.d)
--include $(DEPS)
 
 .PHONY: all
 all: $(TARGET) 
+
+-include $(DEPS)
+
 
 $(TARGET): $(OBJ)
 	@mkdir -p $(dir $@)

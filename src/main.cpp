@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 #include "core/design.hpp"
+#include "core/hpwl.hpp"
 #include "io/lef_reader.hpp"
 #include "io/def_reader.hpp"
 #include "placer/detailed_placer.hpp"
@@ -22,8 +23,10 @@ int main(int argc, char* argv[]){
   def.read(argv[2], d);
   d.buildInstanceNetLists();
 
-  io::DefWriter writer;
-  writer.write(argv[2] /*input DEF*/, d, argv[3] /*output DEF*/);
+  
+
+//   io::DefWriter writer;
+//   writer.write(argv[2] /*input DEF*/, d, argv[3] /*output DEF*/);
 
   // cout << "lef DBU " << d.units.lef_dbu_per_um << '\n';
   
@@ -101,5 +104,17 @@ int main(int argc, char* argv[]){
   // }
 
   // cout << "---------- Nets ----------\n";
+
+  // cout << "---------- Pins ----------\n";
+
+  // for (auto it:d.pins){
+  //   auto pin = it.second;
+  //   cout << pin.name << ' ' << pin.net << '\n';
+  //   cout << pin.x << ' ' << pin.y << '\n';
+  // }
+
+  // cout << "---------- Pins ----------\n";
+
+  cout << "hpwl " << core::hpwl_counts(d) << '\n';
 
 }
